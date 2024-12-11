@@ -10,7 +10,24 @@ export default function override(config) {
 
     config.plugins.unshift(
         new ModuleFederationPlugin({
-            name: "home"
+            name: "home",
+            filename: "remoteEntry.js",
+            remotes: {
+                home: "home@http://localhost:3000/remoteEntry.js",
+                search: "search@http://localhost:3001/remoteEntry.js",
+            },
+            exposes: {},
+            shared: {
+                ...deps,
+                react: {
+                    singleton: true,
+                    requiredVersion: deps.react,
+                },
+                "react-dom": {
+                    singleton: true,
+                    requiredVersion: deps["react-dom"],
+                }
+            }
         })
     )
     return config;
